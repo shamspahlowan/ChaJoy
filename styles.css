@@ -1,0 +1,387 @@
+:root {
+            --brand-green: #2d4628; /* Deep Forest Matcha */
+            --matcha-light: #8da47e;
+            --soft-cream: #f9f7f2;
+            --warm-white: #ffffff;
+            --text: #333333;
+            --accent-wood: #bc987e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        html { scroll-behavior: smooth; }
+        body { background-color: var(--soft-cream); color: var(--text); overflow-x: hidden; line-height: 1.6; }
+
+        h1, h2, h3, .logo { font-family: 'Shippori Mincho', serif; font-weight: 700; }
+
+        /* --- RESTORED: THE LEAF ANIMATION --- */
+        .leaf-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 9999; overflow: hidden;
+        }
+        .leaf {
+            position: absolute; display: block; width: 18px; height: 18px;
+            background: var(--matcha-light); opacity: 0.3; border-radius: 0 100% 0 100%;
+            animation: fall 12s linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.4; }
+            100% { transform: translateY(110vh) translateX(150px) rotate(360deg); opacity: 0; }
+        }
+        .leaf:nth-child(1) { left: 10%; animation-duration: 9s; }
+        .leaf:nth-child(2) { left: 35%; animation-duration: 14s; }
+        .leaf:nth-child(3) { left: 65%; animation-duration: 11s; }
+        .leaf:nth-child(4) { left: 85%; animation-duration: 16s; }
+
+        /* --- NAVIGATION --- */
+        @keyframes navFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        nav{
+            position: fixed; top: 0; width: 100%;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(10px);
+            padding: 20px 10%;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(45, 70, 40, 0.1);
+            animation: navFadeIn 0.8s ease-out;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .logo { 
+            font-size: 1.8rem; 
+            color: var(--brand-green); 
+            text-decoration: none; 
+            letter-spacing: 2px; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        .nav-links { 
+            display: flex; 
+            gap: 35px; 
+            list-style: none;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .nav-links a { 
+            text-decoration: none; 
+            color: var(--text); 
+            font-weight: 400; 
+            font-size: 0.9rem; 
+            letter-spacing: 1px; 
+            transition: 0.3s; 
+        }
+        .nav-links a:hover { color: var(--matcha-light); }
+        
+        /* Nav social icons */
+        .nav-socials {
+            display: flex; 
+            gap: 12px; 
+            align-items: center;
+            margin-left: auto;
+        }
+        .nav-social-link {
+            display: flex; align-items: center; justify-content: center;
+            width: 32px; height: 32px; border-radius: 50%;
+            color: var(--brand-green); background: rgba(141, 164, 126, 0.1);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .nav-social-link:hover {
+            background: var(--matcha-light);
+            color: white;
+            transform: translateY(-2px);
+        }
+        .nav-social-link svg {
+            width: 16px; height: 16px;
+        }
+        
+        /* Nav right placeholder - maintains space even when EST badge is hidden */
+        .nav-right-placeholder {
+            min-width: 80px; 
+            display: flex; 
+            justify-content: flex-end; 
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .nav-est-badge {
+            font-size: 0.7rem; 
+            letter-spacing: 2px; 
+            color: var(--matcha-light);
+        }
+
+        /* --- HERO --- */
+        .hero {
+            height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; padding: 0 10%;
+            background: linear-gradient(rgba(249, 247, 242, 0.6), rgba(249, 247, 242, 0.6)),
+                        url('https://images.unsplash.com/photo-1493856677078-2117a448a6de?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
+        .hero-text h1 { font-size: 4.5rem; color: var(--brand-green); line-height: 1.2; margin-bottom: 20px; }
+        .hero-text span { font-weight: 400; font-style: italic; font-family: 'Shippori Mincho', serif; display: block; font-size: 2.5rem; opacity: 0.8; }
+        .hero-btn {
+            margin-top: 30px; background: var(--brand-green); color: white;
+            padding: 15px 40px; text-decoration: none; border-radius: 2px;
+            font-size: 0.9rem; letter-spacing: 2px; display: inline-block; transition: 0.4s;
+        }
+        .hero-btn:hover { background: var(--matcha-light); transform: translateY(-3px); }
+
+        /* --- STORY SECTION --- */
+        .story-section { padding: 120px 10%; text-align: center; background: var(--warm-white); }
+        .story-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 60px; }
+        .story-card { padding: 20px; }
+        .story-card span { font-size: 2.5rem; display: block; margin-bottom: 20px; filter: sepia(100%) hue-rotate(50deg); }
+        .story-card h4 { font-size: 1.4rem; margin-bottom: 15px; color: var(--brand-green); }
+        .story-card p { font-size: 0.95rem; color: #666; font-weight: 300; }
+
+        /* --- WHY CHOOSE SECTION --- */
+        .why-section {
+            padding: 100px 10%; text-align: center;
+            background: var(--soft-cream);
+        }
+        .why-section h2 {
+            font-size: 2.5rem; color: var(--brand-green); margin-bottom: 10px;
+        }
+        .why-subtitle {
+            color: #999; font-size: 1rem; margin-bottom: 60px;
+        }
+        .why-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px;
+        }
+        .why-card {
+            background: var(--warm-white); padding: 40px 25px; border-radius: 4px;
+            border: 1px solid rgba(0,0,0,0.05); transition: 0.4s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+        }
+        .why-card:hover {
+            transform: translateY(-8px); box-shadow: 0 20px 40px rgba(45, 70, 40, 0.1);
+        }
+        .why-card span {
+            font-size: 2.2rem; display: block; margin-bottom: 18px;
+        }
+        .why-card h4 {
+            font-size: 1.15rem; color: var(--brand-green); margin-bottom: 12px;
+        }
+        .why-card p {
+            font-size: 0.9rem; color: #666; font-weight: 300; line-height: 1.6;
+        }
+        @media (max-width: 900px) {
+            .why-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 500px) {
+            .why-grid { grid-template-columns: 1fr; }
+        }
+
+        /* --- MENU SECTIONS --- */
+        .menu-section { padding: 100px 10%; }
+        .category-title {
+            font-size: 2rem; margin: 80px 0 40px; color: var(--brand-green);
+            display: flex; align-items: center; gap: 15px;
+        }
+        .category-title::after { content: ""; height: 1px; background: var(--matcha-light); flex-grow: 1; opacity: 0.3; }
+       
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+       
+        .item-card {
+            background: var(--warm-white); padding: 40px 30px; border-radius: 4px; text-align: center;
+            transition: 0.4s; border: 1px solid rgba(0,0,0,0.05); cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+        }
+        .item-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(45, 70, 40, 0.1); }
+        .item-card h3 { font-size: 1.2rem; margin-bottom: 15px; color: var(--text); }
+        .item-price { font-weight: 400; color: var(--matcha-light); font-size: 1.1rem; font-family: 'Shippori Mincho', serif; }
+       
+        /* --- CONTACT --- */
+        .contact-area {
+            margin: 100px 10%; display: grid; grid-template-columns: 1fr 1.2fr;
+            background: var(--brand-green); color: white; border-radius: 4px; overflow: hidden;
+        }
+        .contact-info { padding: 80px; background: url('https://www.transparenttextures.com/patterns/asfalt-dark.png'); display: flex; flex-direction: column; }
+        .contact-info h2 { font-size: 2.5rem; margin-bottom: 20px; }
+        
+        /* Contact Details Block */
+        .contact-details {
+            margin-top: 35px; padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.15);
+        }
+        .contact-details h4 {
+            font-size: 1.1rem; font-weight: 600; letter-spacing: 1px;
+            margin-bottom: 6px; color: white;
+        }
+        .contact-subtitle {
+            font-size: 0.85rem; opacity: 0.7; margin-bottom: 20px;
+        }
+        .contact-links {
+            display: flex; flex-direction: column; gap: 12px;
+        }
+        .contact-link {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 0; text-decoration: none; color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            transition: opacity 0.3s, padding-left 0.3s;
+        }
+        .contact-link:hover {
+            opacity: 0.8; padding-left: 8px;
+        }
+        .contact-label {
+            font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase;
+            opacity: 0.6; font-weight: 500;
+        }
+        .contact-value {
+            font-size: 0.9rem; font-weight: 400;
+        }
+        
+        .contact-form { padding: 80px; background: var(--soft-cream); color: var(--text); }
+        .contact-form input, .contact-form textarea {
+            width: 100%; padding: 15px; margin-bottom: 20px; border: none;
+            border-bottom: 1px solid #ddd; background: transparent; outline: none; font-size: 1rem;
+        }
+        .btn-send {
+            background: var(--brand-green); color: white; border: none; padding: 15px 40px;
+            cursor: pointer; font-size: 0.9rem; letter-spacing: 2px; transition: 0.3s;
+        }
+        .btn-send:hover { background: var(--matcha-light); }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(45, 70, 40, 0.8); backdrop-filter: blur(5px);
+            display: none; justify-content: center; align-items: center; z-index: 99999;
+        }
+        .modal-box {
+            background: var(--soft-cream); padding: 50px; width: 90%; max-width: 500px;
+            text-align: center; position: relative; border-radius: 2px;
+        }
+        .opt-group { margin: 25px 0; text-align: left; }
+        .opt-group span { font-size: 0.75rem; letter-spacing: 1px; color: #888; display: block; margin-bottom: 10px; }
+        .opt-flex { display: flex; gap: 10px; }
+        .opt-btn {
+            flex: 1; padding: 12px; border: 1px solid #ddd; background: white;
+            cursor: pointer; font-size: 0.85rem; transition: 0.3s;
+        }
+        .opt-btn.active { background: var(--brand-green); color: white; border-color: var(--brand-green); }
+        .order-confirm-btn {
+            background: var(--brand-green); color: white; border: none; padding: 18px;
+            width: 100%; cursor: pointer; font-size: 0.9rem; letter-spacing: 2px; margin-top: 20px;
+        }
+
+        /* --- MAP PREVIEW (in contact) --- */
+        .map-preview {
+            margin-top: 30px; width: 100%; height: 160px; border-radius: 10px;
+            overflow: hidden; position: relative; cursor: pointer;
+            border: 2px solid rgba(255,255,255,0.15);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        .map-preview:hover {
+            transform: scale(1.03);
+            box-shadow: 0 12px 36px rgba(0,0,0,0.3);
+        }
+        .map-preview iframe {
+            width: 100%; height: 100%; display: block;
+        }
+        .map-preview-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(45, 70, 40, 0.35);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 6px; transition: background 0.35s ease;
+        }
+        .map-preview:hover .map-preview-overlay {
+            background: rgba(45, 70, 40, 0.15);
+        }
+        .map-preview-overlay span {
+            font-size: 1.8rem; filter: none;
+            animation: pinBounce 2s ease-in-out infinite;
+        }
+        @keyframes pinBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+        .map-preview-overlay p {
+            color: white; font-size: 0.75rem; letter-spacing: 2px;
+            text-transform: uppercase; font-weight: 600;
+        }
+
+        /* --- MAP MODAL --- */
+        .map-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(45, 70, 40, 0.75); backdrop-filter: blur(6px);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 99999; opacity: 0; visibility: hidden;
+            transition: opacity 0.35s ease, visibility 0.35s ease;
+        }
+        .map-modal-overlay.active {
+            opacity: 1; visibility: visible;
+        }
+        .map-modal-box {
+            background: var(--warm-white); width: 92%; max-width: 700px;
+            border-radius: 12px; overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.25);
+            transform: translateY(30px) scale(0.96);
+            transition: transform 0.35s ease;
+        }
+        .map-modal-overlay.active .map-modal-box {
+            transform: translateY(0) scale(1);
+        }
+        .map-modal-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 24px 28px; border-bottom: 1px solid rgba(0,0,0,0.06);
+        }
+        .map-modal-close {
+            font-size: 1.8rem; color: #bbb; cursor: pointer;
+            line-height: 1; transition: color 0.2s;
+        }
+        .map-modal-close:hover { color: var(--brand-green); }
+        .map-modal-body {
+            width: 100%; height: 380px;
+        }
+        .map-modal-footer {
+            padding: 16px 28px; text-align: center;
+            border-top: 1px solid rgba(0,0,0,0.06);
+        }
+        .map-directions-btn {
+            display: inline-block; background: var(--brand-green); color: white;
+            padding: 12px 32px; border-radius: 6px; text-decoration: none;
+            font-size: 0.8rem; letter-spacing: 2px; font-weight: 600;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .map-directions-btn:hover {
+            background: var(--matcha-light); transform: translateY(-2px);
+        }
+        @media (max-width: 600px) {
+            .map-modal-body { height: 280px; }
+            .map-modal-header { padding: 18px 20px; }
+            .map-modal-footer { padding: 14px 20px; }
+        }
+
+        footer { text-align: center; padding: 60px; background: var(--warm-white); color: #999; font-size: 0.8rem; letter-spacing: 1px; }
+
+        @media (max-width: 900px) {
+            .hero-text h1 { font-size: 2.8rem; }
+            .story-grid, .contact-area { grid-template-columns: 1fr; }
+            .contact-info, .contact-form { padding: 40px; }
+        }
+        
+        @media (max-width: 768px) {
+            nav { padding: 15px 5%; }
+            .nav-links { gap: 20px; }
+            .nav-links a { font-size: 0.85rem; }
+            .nav-socials { gap: 8px; margin-left: 15px; }
+            .nav-social-link { width: 28px; height: 28px; }
+            .nav-social-link svg { width: 14px; height: 14px; }
+            .nav-right-placeholder { min-width: 60px; }
+        }
+        
+        @media (max-width: 600px) {
+            .nav-socials { display: none; }
+            .nav-right-placeholder { min-width: 0; }
+        }
