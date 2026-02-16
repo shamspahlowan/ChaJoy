@@ -544,43 +544,27 @@ function setupA11yInteractions() {
 
 function setupHeroParallax() {
   const hero = document.querySelector(".hero");
-  const logo = document.querySelector(".hero-logo");
   if (!hero) return;
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduceMotion || window.innerWidth <= 768) return;
-  let logoParallaxOffset = 0;
+  if (reduceMotion) return;
+  const enableParallax = window.innerWidth > 768;
 
   function updateParallax() {
+    if (!enableParallax) return;
     const rect = hero.getBoundingClientRect();
     const viewportH = window.innerHeight || 1;
     const progress = Math.max(-1, Math.min(1, (viewportH - rect.top) / (viewportH + rect.height)));
 
     const bgOffset = Math.round((progress - 0.5) * 36);
     hero.style.backgroundPosition = `center calc(50% + ${bgOffset}px)`;
-
-    if (logo) {
-      logoParallaxOffset = Math.round((progress - 0.5) * 18);
-    }
   }
 
-  if (logo) {
-    const floatStartMs = 1300; // starts after initial fade-down
-    const startAt = performance.now() + floatStartMs;
-
-    function renderLogoFloat(now) {
-      const floatOffset = now >= startAt ? Math.sin((now - startAt) / 850) * 4 : 0;
-      const y = Math.round((logoParallaxOffset + floatOffset) * 100) / 100;
-      logo.style.transform = `translateY(${y}px)`;
-      window.requestAnimationFrame(renderLogoFloat);
-    }
-
-    window.requestAnimationFrame(renderLogoFloat);
+  if (enableParallax) {
+    updateParallax();
+    window.addEventListener("scroll", updateParallax, { passive: true });
+    window.addEventListener("resize", updateParallax);
   }
-
-  updateParallax();
-  window.addEventListener("scroll", updateParallax, { passive: true });
-  window.addEventListener("resize", updateParallax);
 }
 
 /** ====== Run ====== **/

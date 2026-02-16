@@ -201,9 +201,15 @@
             top: -16px;
         }
         .hero-logo {
-            will-change: transform;
-            transition: transform 0.08s linear;
+            position: relative;
+            will-change: top;
+            animation: hero-logo-float 2.8s ease-in-out 1.25s infinite;
             filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.22));
+        }
+        @keyframes hero-logo-float {
+            0% { top: 0; }
+            50% { top: -8px; }
+            100% { top: 0; }
         }
         .hero-text h1 { font-size: 4.5rem; color: var(--brand-green); line-height: 1.2; margin-bottom: 20px; text-shadow: 0 7px 20px rgba(255,255,255,0.25); }
         .hero-text span { font-weight: 400; font-style: italic; font-family: 'Shippori Mincho', serif; display: block; font-size: 2.5rem; opacity: 0.8; }
