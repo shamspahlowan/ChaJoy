@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="ChaJoy Bangladesh — authentic Chinese tea, milk tea & ice cream in Mirpur, Dhaka. Premium flavors, student-friendly prices. Visit us today!">
+    <meta name="description" content="ChaJoy Bangladesh — authentic Chinese tea, milk tea & ice cream in Dhaka. Premium flavors, student-friendly prices. Visit us today!">
     <title>ChaJoy Bangladesh | Chinese Tea & Ice Cream in Mirpur, Dhaka</title>
     <link rel="icon" type="image/jpeg" href="https://i.ibb.co/9myXRCnr/605726359-10224806733795738-4038340599265679454-n.jpg">
    
@@ -22,7 +22,12 @@
             CHAJOY
             <img src="https://i.ibb.co/9myXRCnr/605726359-10224806733795738-4038340599265679454-n.jpg" style="height: 30px; width: auto; border-radius: 4px;">
         </a>
-        <ul class="nav-links">
+        <button class="nav-toggle" id="navToggle" aria-label="Open navigation menu" aria-controls="primaryNav" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="nav-links" id="primaryNav">
             <li><a href="#home">Home</a></li>
             <li><a href="#story">Our Story</a></li>
             <li><a href="#menu">Menu</a></li>
@@ -32,13 +37,12 @@
             <!-- Dynamically loaded from JS -->
         </div>
         <div class="nav-right-placeholder">
-            <!-- <div class="nav-est-badge">EST. 2026</div> -->
-            <!-- Comment out the line above to hide badge while keeping nav layout -->
+            <a href="#menu" class="nav-order-btn">Order Now</a>
         </div>
     </nav>
 
     <section class="hero" id="home">
-        <img src="https://i.ibb.co/9myXRCnr/605726359-10224806733795738-4038340599265679454-n.jpg" style="max-width: 180px; height: auto; border-radius: 50%; border: 4px solid white; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);" data-aos="fade-down" data-aos-duration="1200">
+        <img class="hero-logo" src="https://i.ibb.co/9myXRCnr/605726359-10224806733795738-4038340599265679454-n.jpg" style="max-width: 180px; height: auto; border-radius: 50%; border: 4px solid white; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);" data-aos="fade-down" data-aos-duration="1200">
        
         <div class="hero-text" data-aos="fade-up" data-aos-delay="200">
             <h1 style="font-weight: 700;" data-aos="fade-up" data-aos-delay="400">SIP THE CULTURE <span>Chill the Moment</span></h1>
@@ -87,40 +91,65 @@
     <section class="menu-section" id="menu">
         <h2 style="text-align: center; font-size: 3rem; color: var(--brand-green); margin-bottom: 20px;" data-aos="fade-up">MENU</h2>
         <p style="text-align: center; color: #999; margin-bottom: 60px;" data-aos="fade-up" data-aos-delay="100">Our Selection</p>
+        <div class="menu-order-cta" data-aos="fade-up" data-aos-delay="140">
+            <a href="#menuRoot" class="menu-order-link">Tap Any Item Card To Order</a>
+        </div>
 
         <div id="menuRoot"></div>
     </section>
 
     <section class="contact-area" id="contact" data-aos="fade-up">
         <div class="contact-info">
-            <h2 data-aos="fade-up">Find Calm.</h2>
-            <p style="opacity: 0.8; margin-bottom: 40px;" data-aos="fade-up" data-aos-delay="100">Experience the finest tea and ice cream in the heart of the city.</p>
-            <div style="font-weight: 300;" data-aos="fade-up" data-aos-delay="200">
-                <p>📍 Kachukhet Rd, Mirpur, Dhaka</p>
-                <p>🕒 Open: 10:00 - 23:00</p>
+            <h2 class="contact-heading" data-aos="fade-up">Find Calm.</h2>
+            <p class="contact-intro" data-aos="fade-up" data-aos-delay="100">Experience the finest tea and ice cream in the heart of the city.</p>
+
+            <div class="branch-panel" data-aos="fade-up" data-aos-delay="200">
+                <h4>Our Branches</h4>
+                <div class="branch-list">
+                    <article class="branch-item branch-item-active">
+                        <div class="branch-title-row">
+                            <span class="branch-name">Mirpur Branch</span>
+                            <span class="branch-badge">Open Now</span>
+                        </div>
+                        <p>Kachukhet Rd, Mirpur, Dhaka</p>
+                        <p>Daily: 10:00 - 23:00</p>
+                    </article>
+                    <article class="branch-item branch-item-muted">
+                        <div class="branch-title-row">
+                            <span class="branch-name">Second Branch</span>
+                            <span class="branch-badge branch-badge-soft">Coming Soon</span>
+                        </div>
+                        <p>Location details will be announced soon.</p>
+                        <p>Stay connected on socials for updates.</p>
+                    </article>
+                </div>
             </div>
 
             <div class="contact-details" data-aos="fade-up" data-aos-delay="250">
                 <h4>Get in Touch</h4>
-                <p class="contact-subtitle">We’re here to make every sip special.</p>
+                <p class="contact-subtitle">We're here to make every sip special.</p>
                 <div class="contact-links" id="contactLinksContainer">
                     <!-- Dynamically loaded from JS -->
                 </div>
             </div>
 
-            <div class="map-preview" onclick="openMapModal()" data-aos="fade-up" data-aos-delay="300">
+            <button type="button" class="map-preview" onclick="openMapModal()" data-aos="fade-up" data-aos-delay="300" aria-haspopup="dialog" aria-controls="mapModal" aria-label="Open map in modal">
                 <iframe
                     src="https://www.google.com/maps?q=23.79360082800227,90.38810785352571&z=17&output=embed" 
                     width="100%" height="100%" style="border:0; pointer-events:none;" 
                     loading="lazy" referrerpolicy="no-referrer-when-downgrade">
                 </iframe>
                 <div class="map-preview-overlay">
-                    <span>📍</span>
+                    <span>&#128205;</span>
                     <p>Tap to expand map</p>
                 </div>
-            </div>
+            </button>
         </div>
         <div class="contact-form" data-aos="fade-up" data-aos-delay="100">
+            <div class="contact-form-head">
+                <h3>Send a Message</h3>
+                <p>For partnerships, events, or pre-orders.</p>
+            </div>
             <input type="text" placeholder="Your Name" data-aos="fade-up" data-aos-delay="200">
             <input type="email" placeholder="Email Address" data-aos="fade-up" data-aos-delay="250">
             <textarea rows="3" placeholder="How can we bring you joy?" data-aos="fade-up" data-aos-delay="300"></textarea>
@@ -129,40 +158,26 @@
     </section>
 
     <div class="modal-overlay" id="orderModal">
-        <div class="modal-box">
-            <span style="float:right; cursor:pointer; font-size:1.5rem; color: #ccc;" onclick="closeOrder()">&times;</span>
+        <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="m-name">
+            <button type="button" class="modal-close-btn" onclick="closeOrder()" aria-label="Close order modal">&times;</button>
             <h2 id="m-name" style="color: var(--brand-green); font-size: 1.8rem; margin-bottom: 5px;"></h2>
             <p id="m-price" style="color: var(--matcha-light); font-size: 1.2rem; font-family: 'Shippori Mincho', serif;"></p>
-           
-            <div class="opt-group">
-                <span>SIZE</span>
-                <div class="opt-flex">
-                    <button class="opt-btn" onclick="toggleActive(this)">Small</button>
-                    <button class="opt-btn active" onclick="toggleActive(this)">Regular</button>
-                </div>
-            </div>
-           
-            <div class="opt-group">
-                <span>SWEETNESS</span>
-                <div class="opt-flex">
-                    <button class="opt-btn" onclick="toggleActive(this)">50%</button>
-                    <button class="opt-btn active" onclick="toggleActive(this)">100%</button>
-                </div>
-            </div>
+            <div id="orderOptions"></div>
+            <p class="modal-help-text">Select your preferences, then add to WhatsApp order.</p>
 
-            <button class="order-confirm-btn" onclick="confirmOrder()">ADD TO TRAY</button>
+            <button class="order-confirm-btn" onclick="confirmOrder()">SEND ORDER TO WHATSAPP</button>
         </div>
     </div>
 
     <!-- Google Map Modal -->
     <div class="map-modal-overlay" id="mapModal">
-        <div class="map-modal-box">
+        <div class="map-modal-box" role="dialog" aria-modal="true" aria-labelledby="mapModalTitle">
             <div class="map-modal-header">
                 <div>
-                    <h3 style="color: var(--brand-green); font-size: 1.4rem; margin-bottom: 4px;">Find Us</h3>
+                    <h3 id="mapModalTitle" style="color: var(--brand-green); font-size: 1.4rem; margin-bottom: 4px;">Find Us</h3>
                     <p style="color: #888; font-size: 0.85rem;">Kachukhet Rd, Mirpur, Dhaka</p>
                 </div>
-                <span class="map-modal-close" onclick="closeMapModal()">&times;</span>
+                <button type="button" class="map-modal-close" onclick="closeMapModal()" aria-label="Close map modal">&times;</button>
             </div>
             <div class="map-modal-body">
                 <iframe id="mapModalIframe"
@@ -186,3 +201,4 @@
     <script src="script.js"></script>
 </body>
 </html>
+

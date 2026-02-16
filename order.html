@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ChaJoy Ordering - Fast one-tap ordering.">
+    <title>ChaJoy Order</title>
+    <link rel="icon" type="image/jpeg" href="https://i.ibb.co/9myXRCnr/605726359-10224806733795738-4038340599265679454-n.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="order.css">
+</head>
+<body>
+    <header class="topbar">
+        <a href="index.html" class="brand">
+            <img src="https://i.ibb.co/9myXRCnr/605726359-10224806733795738-4038340599265679454-n.jpg" alt="ChaJoy logo">
+            <span>ChaJoy</span>
+        </a>
+        <nav class="top-actions">
+            <a href="index.html" class="btn-lite">Back Home</a>
+            <a href="#cartPanel" class="btn-solid">Go To Bill</a>
+        </nav>
+    </header>
+
+    <main class="layout">
+        <section class="menu-board">
+            <div class="board-head">
+                <h1>Store Menu Board</h1>
+                <p>Tap any item once to add it with your current settings.</p>
+            </div>
+
+            <div class="quick-controls">
+                <div class="control-block">
+                    <label for="sizeSelect">Cup Size</label>
+                    <select id="sizeSelect">
+                        <option value="S">S</option>
+                        <option value="M" selected>M</option>
+                        <option value="L">L</option>
+                    </select>
+                </div>
+
+                <div class="control-block">
+                    <label for="sugarSelect">Sugar Level</label>
+                    <select id="sugarSelect">
+                        <option value="0%">0%</option>
+                        <option value="30%">30%</option>
+                        <option value="50%">50%</option>
+                        <option value="70%">70%</option>
+                        <option value="100%" selected>100%</option>
+                    </select>
+                </div>
+
+                <div class="control-block">
+                    <label for="iceSelect">Ice Level</label>
+                    <select id="iceSelect">
+                        <option value="No Ice">No Ice</option>
+                        <option value="Less">Less</option>
+                        <option value="Normal" selected>Normal</option>
+                    </select>
+                </div>
+
+                <div class="control-block search-wrap">
+                    <label for="searchInput">Search</label>
+                    <input type="search" id="searchInput" placeholder="Find item name">
+                </div>
+            </div>
+
+            <section id="menuSections" class="menu-sections"></section>
+        </section>
+
+        <aside class="cart-panel" id="cartPanel">
+            <h2>Order Tray</h2>
+            <div id="cartItems" class="cart-items"></div>
+
+            <div class="cart-totals">
+                <div><span>Subtotal</span><strong id="subtotal">BDT 0</strong></div>
+                <div><span>Service</span><strong id="service">BDT 0</strong></div>
+                <div class="grand"><span>Total</span><strong id="grandTotal">BDT 0</strong></div>
+            </div>
+
+            <form id="orderMeta" class="order-meta">
+                <label>
+                    Customer Name
+                    <input type="text" id="customerName" placeholder="Customer name" required>
+                </label>
+                <label>
+                    Phone
+                    <input type="tel" id="customerPhone" placeholder="01XXXXXXXXX" required>
+                </label>
+                <label>
+                    Pickup Branch
+                    <select id="pickupBranch">
+                        <option value="Mirpur Branch">Mirpur Branch</option>
+                        <option value="Second Branch (Coming Soon)">Second Branch (Coming Soon)</option>
+                    </select>
+                </label>
+                <label>
+                    Notes
+                    <textarea id="orderNotes" rows="2" placeholder="Optional notes"></textarea>
+                </label>
+            </form>
+
+            <div class="order-actions">
+                <button id="generateBtn" type="button" class="btn-solid full">Generate Final Order</button>
+                <button id="clearBtn" type="button" class="btn-lite full">Clear Tray</button>
+            </div>
+
+            <section class="output" id="orderOutput">
+                <h3>Order Text</h3>
+                <textarea id="orderText" rows="10" readonly placeholder="Order text will appear here."></textarea>
+                <div class="output-actions">
+                    <button id="copyBtn" type="button" class="btn-lite">Copy</button>
+                    <a id="waBtn" class="btn-solid" href="#" target="_blank" rel="noopener noreferrer">Send WhatsApp</a>
+                </div>
+            </section>
+        </aside>
+    </main>
+
+    <script src="order.js"></script>
+</body>
+</html>

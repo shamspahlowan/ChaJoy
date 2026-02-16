@@ -16,7 +16,7 @@ const CONTACT_INFO = {
   facebook: {
     label: "Facebook",
     value: "ChaJoy Bangladesh",
-    url: "https://facebook.com/chajoybd"
+    url: "https://www.facebook.com/p/ChaJoy-Bangladesh-61585587403077/"
   },
   phone: {
     label: "Phone",
@@ -158,6 +158,9 @@ function renderMenu(db) {
     cat.items.forEach((item, index) => {
       const card = document.createElement("div");
       card.className = "item-card";
+      card.tabIndex = 0;
+      card.setAttribute("role", "button");
+      card.setAttribute("aria-label", `Open order options for ${item.name}`);
       card.setAttribute("data-aos", "fade-up");
       card.setAttribute("data-aos-delay", (index * 50).toString());
       if (cat.grid?.compact) card.style.padding = "20px";
@@ -176,6 +179,12 @@ function renderMenu(db) {
       card.addEventListener("click", () => {
         openOrderFromDB(item);
       });
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openOrderFromDB(item);
+        }
+      });
 
       grid.appendChild(card);
     });
@@ -189,24 +198,111 @@ function renderMenu(db) {
 
 /** ====== MODAL INTEGRATION ====== **/
 let currentItem = null;
+let orderTriggerEl = null;
+let mapTriggerEl = null;
+
+function getDefaultOption(options, preferred = []) {
+  if (!options?.length) return "";
+  const found = preferred.find((value) => options.includes(value));
+  return found || options[0];
+}
+
+function getToppingItems() {
+  const toppingsCategory = MENU_DB.find((cat) => cat.id === "extra-toppings");
+  return toppingsCategory?.items || [];
+}
+
+function getActiveOption(key) {
+  const group = document.querySelector(`.opt-group[data-option-key="${key}"]`);
+  const active = group?.querySelector(".opt-btn.active");
+  return active?.dataset.optionValue || active?.textContent || "";
+}
+
+function getCurrentPriceLabel(item) {
+  if (!item) return "";
+  const selectedSize = getActiveOption("size");
+  if (item.variants?.length) {
+    const selectedVariant = item.variants.find((v) => v.label === selectedSize) || item.variants[0];
+    return `BDT ${selectedVariant.price}`;
+  }
+  return item.priceLabel || "";
+}
+
+function createSingleOptionGroup(label, key, options, defaultValue) {
+  if (!options?.length) return "";
+  const buttons = options.map((opt) => {
+    const isActive = opt === defaultValue ? " active" : "";
+    return `<button type="button" class="opt-btn${isActive}" data-option-key="${key}" data-option-value="${escapeHtml(opt)}">${escapeHtml(opt)}</button>`;
+  }).join("");
+
+  return `
+    <div class="opt-group" data-option-key="${key}" data-mode="single">
+      <span>${label}</span>
+      <div class="opt-flex">${buttons}</div>
+    </div>
+  `;
+}
+
+function renderOrderOptions(item) {
+  const root = document.getElementById("orderOptions");
+  if (!root) return;
+
+  const sizeOptions = item.variants?.length
+    ? item.variants.map((v) => v.label)
+    : (item.options?.size || []);
+  const sweetnessOptions = item.options?.sweetness || [];
+  const iceOptions = item.options?.ice || [];
+
+  const groups = [];
+
+  if (sizeOptions.length) {
+    groups.push(createSingleOptionGroup("SIZE", "size", sizeOptions, getDefaultOption(sizeOptions, ["M", "Regular", "Small"])));
+  }
+  if (sweetnessOptions.length) {
+    groups.push(createSingleOptionGroup("SWEETNESS", "sweetness", sweetnessOptions, getDefaultOption(sweetnessOptions, ["100%", "70%"])));
+  }
+  if (iceOptions.length) {
+    groups.push(createSingleOptionGroup("ICE", "ice", iceOptions, getDefaultOption(iceOptions, ["Normal", "Less"])));
+  }
+
+  const toppings = getToppingItems();
+  if (toppings.length && item.type !== "topping") {
+    const chips = toppings.map((t) => {
+      return `<button type="button" class="topping-chip" data-topping-name="${escapeHtml(t.name)}" data-topping-price="${t.basePrice || 0}">
+        <span>${escapeHtml(t.name)}</span>
+        <small>+BDT ${t.basePrice || 0}</small>
+      </button>`;
+    }).join("");
+
+    groups.push(`
+      <div class="opt-group" data-option-key="toppings" data-mode="multi">
+        <span>EXTRA TOPPINGS</span>
+        <div class="toppings-flex">${chips}</div>
+      </div>
+    `);
+  }
+
+  root.innerHTML = groups.join("");
+}
 
 function openOrderFromDB(item) {
   currentItem = item;
+  orderTriggerEl = document.activeElement;
 
   document.getElementById("m-name").innerText = item.name;
-  document.getElementById("m-price").innerText = item.priceLabel || "";
+  renderOrderOptions(item);
+  document.getElementById("m-price").innerText = getCurrentPriceLabel(item);
 
   document.getElementById("orderModal").style.display = "flex";
+  const closeBtn = document.querySelector(".modal-close-btn");
+  if (closeBtn) closeBtn.focus();
 }
 
 function closeOrder() {
   document.getElementById("orderModal").style.display = "none";
-}
-
-function toggleActive(btn) {
-  let btns = btn.parentElement.querySelectorAll(".opt-btn");
-  btns.forEach(b => b.classList.remove("active"));
-  btn.classList.add("active");
+  if (orderTriggerEl && typeof orderTriggerEl.focus === "function") {
+    orderTriggerEl.focus();
+  }
 }
 
 function confirmOrder() {
@@ -225,20 +321,42 @@ function confirmOrder() {
 
 /** ====== Helpers ====== **/
 function getSelectedOptions() {
-  const modal = document.querySelector(".modal-box");
-  const activeBtns = modal.querySelectorAll(".opt-btn.active");
+  const picked = {};
+  const groups = document.querySelectorAll(".opt-group[data-mode=\"single\"]");
 
-  const size = activeBtns[0]?.innerText || "Regular";
-  const sweetness = activeBtns[1]?.innerText || "100%";
+  groups.forEach((group) => {
+    const key = group.dataset.optionKey;
+    const active = group.querySelector(".opt-btn.active");
+    if (key && active) picked[key] = active.dataset.optionValue || active.textContent.trim();
+  });
 
-  return { size, sweetness };
+  const toppings = Array.from(document.querySelectorAll(".topping-chip.active")).map((chip) => ({
+    name: chip.dataset.toppingName || "",
+    price: Number(chip.dataset.toppingPrice || 0)
+  }));
+
+  picked.toppings = toppings;
+  return picked;
 }
 
 function buildOrderMessage(item, selected) {
+  const basePrice = getCurrentPriceLabel(item);
+  const optionLines = [];
+  if (selected.size) optionLines.push(`- Size: ${selected.size}`);
+  if (selected.sweetness) optionLines.push(`- Sweetness: ${selected.sweetness}`);
+  if (selected.ice) optionLines.push(`- Ice: ${selected.ice}`);
+
+  if (selected.toppings?.length) {
+    const toppingText = selected.toppings.map((t) => `${t.name} (+BDT ${t.price})`).join(", ");
+    optionLines.push(`- Extra Toppings: ${toppingText}`);
+  } else {
+    optionLines.push("- Extra Toppings: None");
+  }
+
   return `Hello ChaJoy Bangladesh! I want to order:
 - Item: ${item.name}
-- Size: ${selected.size}
-- Sweetness: ${selected.sweetness}
+- Item Price: ${basePrice}
+${optionLines.join("\n")}
 
 Pickup location: Mirpur, Dhaka.`;
 }
@@ -274,15 +392,21 @@ function renderMapDirectionsButton() {
 }
 
 function openMapModal() {
+  mapTriggerEl = document.activeElement;
   const iframe = document.getElementById("mapModalIframe");
   if (!iframe.src || iframe.src === "about:blank") {
     iframe.src = MAP_EMBED_SRC;
   }
   document.getElementById("mapModal").classList.add("active");
+  const closeBtn = document.querySelector(".map-modal-close");
+  if (closeBtn) closeBtn.focus();
 }
 
 function closeMapModal() {
   document.getElementById("mapModal").classList.remove("active");
+  if (mapTriggerEl && typeof mapTriggerEl.focus === "function") {
+    mapTriggerEl.focus();
+  }
 }
 
 /** ====== CONTACT INFO RENDERER ====== **/
@@ -344,8 +468,127 @@ function renderNavSocials() {
   });
 }
 
+function setupOrderModalInteractions() {
+  const optionsRoot = document.getElementById("orderOptions");
+  if (!optionsRoot) return;
+
+  optionsRoot.addEventListener("click", (e) => {
+    const singleBtn = e.target.closest(".opt-btn");
+    if (singleBtn) {
+      const group = singleBtn.closest(".opt-group");
+      if (!group) return;
+      group.querySelectorAll(".opt-btn").forEach((btn) => btn.classList.remove("active"));
+      singleBtn.classList.add("active");
+      if (group.dataset.optionKey === "size" && currentItem) {
+        document.getElementById("m-price").innerText = getCurrentPriceLabel(currentItem);
+      }
+      return;
+    }
+
+    const toppingChip = e.target.closest(".topping-chip");
+    if (toppingChip) {
+      toppingChip.classList.toggle("active");
+    }
+  });
+}
+
+function setupMobileNav() {
+  const toggle = document.getElementById("navToggle");
+  const nav = document.getElementById("primaryNav");
+  if (!toggle || !nav) return;
+
+  function closeNav() {
+    nav.classList.remove("nav-open");
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.setAttribute("aria-label", "Open navigation menu");
+  }
+
+  toggle.addEventListener("click", () => {
+    const expanded = toggle.getAttribute("aria-expanded") === "true";
+    if (expanded) {
+      closeNav();
+      return;
+    }
+    nav.classList.add("nav-open");
+    toggle.setAttribute("aria-expanded", "true");
+    toggle.setAttribute("aria-label", "Close navigation menu");
+  });
+
+  nav.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      closeNav();
+    });
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!nav.classList.contains("nav-open")) return;
+    if (nav.contains(e.target) || toggle.contains(e.target)) return;
+    closeNav();
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 768) closeNav();
+  });
+}
+
+function setupA11yInteractions() {
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      const orderOpen = document.getElementById("orderModal").style.display === "flex";
+      const mapOpen = document.getElementById("mapModal").classList.contains("active");
+      if (orderOpen) closeOrder();
+      if (mapOpen) closeMapModal();
+    }
+  });
+}
+
+function setupHeroParallax() {
+  const hero = document.querySelector(".hero");
+  const logo = document.querySelector(".hero-logo");
+  if (!hero) return;
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduceMotion || window.innerWidth <= 768) return;
+  let logoParallaxOffset = 0;
+
+  function updateParallax() {
+    const rect = hero.getBoundingClientRect();
+    const viewportH = window.innerHeight || 1;
+    const progress = Math.max(-1, Math.min(1, (viewportH - rect.top) / (viewportH + rect.height)));
+
+    const bgOffset = Math.round((progress - 0.5) * 36);
+    hero.style.backgroundPosition = `center calc(50% + ${bgOffset}px)`;
+
+    if (logo) {
+      logoParallaxOffset = Math.round((progress - 0.5) * 18);
+    }
+  }
+
+  if (logo) {
+    const floatStartMs = 1300; // starts after initial fade-down
+    const startAt = performance.now() + floatStartMs;
+
+    function renderLogoFloat(now) {
+      const floatOffset = now >= startAt ? Math.sin((now - startAt) / 850) * 4 : 0;
+      const y = Math.round((logoParallaxOffset + floatOffset) * 100) / 100;
+      logo.style.transform = `translateY(${y}px)`;
+      window.requestAnimationFrame(renderLogoFloat);
+    }
+
+    window.requestAnimationFrame(renderLogoFloat);
+  }
+
+  updateParallax();
+  window.addEventListener("scroll", updateParallax, { passive: true });
+  window.addEventListener("resize", updateParallax);
+}
+
 /** ====== Run ====== **/
 renderMenu(MENU_DB);
 renderContactInfo();
 renderNavSocials();
 renderMapDirectionsButton();
+setupMobileNav();
+setupA11yInteractions();
+setupOrderModalInteractions();
+setupHeroParallax();
